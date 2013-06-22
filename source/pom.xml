@@ -106,12 +106,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.10</version>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<version>2.3</version>
+				<version>3.0.1</version>
 			</plugin>
 
 
@@ -126,6 +127,7 @@
 			<plugin>
 				<!--  >groupId>org.apache.maven.plugins</groupId-->
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
 				<configuration>
 					<show>private</show>
 					<source>1.5</source>
@@ -180,10 +182,38 @@
 	<build>
 		<!-- finalName>siena</finalName-->
 		<plugins>
+ <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-jar-plugin</artifactId>
+	   <version>2.4</version>
+       <executions>
+         <execution>
+           <goals>
+             <goal>test-jar</goal>
+           </goals>
+         </execution>
+       </executions>
+     </plugin>		
+ <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+              <goal>test-jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>     
 			<!-- Compiler settings -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -193,6 +223,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.10</version>
 				<configuration>
 					<consoleOutput>false</consoleOutput>
 					<outputFileFormat>plain</outputFileFormat>
@@ -206,12 +237,13 @@
 				<configuration>
 					<format>txt</format>
 				</configuration>
-				<version>2.3</version>
+				<version>3.0.1</version>
 			</plugin>
 
 			<!-- Test cases -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.14.1</version>
 				<configuration>
 					<excludes>
 						<exclude>**/BaseTest.java</exclude>
@@ -230,7 +262,7 @@
 		<repository>
 			<id>apache-snapshot</id>
 			<name>Apache Snapshot Repository</name>
-			<url>https://repository.apache.org/content/repositories/snapshots</url>
+			<url>http://repository.apache.org/snapshots/</url>
 			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
 		<repository>
