@@ -1,2 +1,6 @@
 /target
 /bin
+/.settings
+/.classpath
+/.jazzignore
+/.project
