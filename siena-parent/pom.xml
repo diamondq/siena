@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+   <properties>
+
+   </properties>
+
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>siena</groupId>
+   <artifactId>parent</artifactId>
+	<version>1.0.0-b7</version>
+
+   <name>Siena Parent</name>
+
+   <packaging>pom</packaging>
+
+	<url>http://www.sienaproject.com</url>
+	<description>
+		Siena is a persistence abstraction layer made in Java with various implementations:
+		* siena-jdbc: persists objects into a relational database using JDBC (status: deeply tested)
+		* siena-gae: persists objects into the Google App Engine's datastore using its low-level API (status: beta)
+		* siena-sdb: persists objects using Amazon's SimpleDB (very experimental)
+		* siena-remote: persists objects remotely using a remote web application that uses siena. (planning)
+		
+		Siena is also:
+		* Intrusive. You make a class persistent by
+		extending a certain class. Relationships are defined also in an
+		intrusive way.
+		* Simple. Simplicity is the most important thing.
+		* Limited. Due to the simplicity there are several unsupported
+		things such as JOINs.
+		* Extensible. There are two interfaces you
+		can implement on your own way.
+
+
+	</description>
+
+
+	<licenses>
+		<license>
+			<name>Apache 2</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>Apache License 2.0</comments>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>Google Code</name>
+		<url>http://code.google.com/</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>pvoitot</id>
+			<name>Pascal Voitot</name>
+			<email>pascal.voitot.dev@gmail.com</email>
+			<organization>Mandubian</organization>
+			<organizationUrl>http://www.mandubian.org/</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>gimenete</id>
+			<name>Alberto Gimeno</name>
+			<email>gimenete at gmail.com</email>
+			<organization>Google Code</organization>
+			<organizationUrl>http://code.google.com/</organizationUrl>
+			<roles>
+				<role>Architect</role>
+				<role>Manager</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>jsanca</id>
+			<name>Jonathan Sánchez</name>
+			<email>jsanca at gmail.com</email>
+			<organization>Google Code</organization>
+			<organizationUrl>http://code.google.com/</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>ZiglioNZ</id>
+			<name>Emanuele Ziglioli</name>
+			<email>zigliolie at sirtrack dot com</email>
+			<organization>Sirtrack</organization>
+			<organizationUrl>http://www.sirtrack.com/</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>diamondq</id>
+			<name>Mike Mansell</name>
+			<email>siena at michaelmansell dot com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<issueManagement>
+		<system>Gooble issues tracker</system>
+		<url>http://code.google.com/p/siena/issues</url>
+	</issueManagement>
+
+
+   <prerequisites>
+      <maven>2.0</maven>
+   </prerequisites>
+
+   <modules>
+      <module>../source</module>
+      <module>../siena-mapdb</module>
+   </modules>
+
+
+</project>
