@@ -8,11 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 
 import org.mapdb.DB;
 
 import siena.Query;
+import siena.QueryOrder;
+import siena.core.base.BaseOptions;
 import siena.core.base.BasePersistenceManager;
 import siena.core.base.MapToKeyTransformer;
 import siena.core.base.MapToObjectTransformer;
@@ -58,7 +62,8 @@ public class MapDBPersistenceManager
 				};
 			});
 
-	private DB mDB;
+	DB mDB;
+	private ConcurrentMap<Class<?>, MapDBClassInfo> mInfoMap = new ConcurrentHashMap<Class<?>, MapDBClassInfo>();
 
 	public MapDBPersistenceManager() {
 		super();
@@ -73,7 +78,6 @@ public class MapDBPersistenceManager
 	 */
 	@Override
 	public void init(Properties p) {
-		MapDBClassInfo.sDB = mDB;
 	}
 
 	/**
@@ -102,11 +106,12 @@ public class MapDBPersistenceManager
 	@Override
 	protected <T> void deleteByKey(Class<T> pClazz, Object pKey) {
 		MapDBClassInfo clInfo = getClassInfo(pClazz, true);
-		clInfo.mPrimaryMap.remove(pKey);
+		clInfo.mPrimaryMap.remove(collapseKeyToString(pKey));
 	}
 
 	public void exit() {
 		mDB.commit();
+		mDB.close();
 	}
 
 	/**
@@ -116,7 +121,13 @@ public class MapDBPersistenceManager
 	@Override
 	protected MapDBClassInfo getClassInfo(Class<?> pClass,
 			boolean pCreateIfMissing) {
-		return MapDBClassInfo.getClassInfo(pClass, pCreateIfMissing);
+		MapDBClassInfo info = mInfoMap.get(pClass);
+		if ((info == null) && (pCreateIfMissing == true)) {
+			MapDBClassInfo newInfo = new MapDBClassInfo(pClass, this);
+			if ((info = mInfoMap.putIfAbsent(pClass, newInfo)) == null)
+				info = newInfo;
+		}
+		return info;
 	}
 
 	/**
@@ -149,10 +160,19 @@ public class MapDBPersistenceManager
 	protected <T, O> Iterator<O> retrieveData(MapDBClassInfo pCLInfo,
 			Query<T> pQuery, MapDBQueryInfo pQueryInfo, int pLimit,
 			Object pOffset, Function<Map<String, Object>, O> pTransformer) {
-		// Collection<O> results = buildSortedResultCollection(pQuery,
-		// pTransformers);
+
+		BaseOptions opts = getStandardOptions(pQuery, pLimit, pOffset);
 
 		Collection<Map<String, Object>> source = new ArrayList<Map<String, Object>>();
+
+		final List<QueryOrder> orderBys = pQuery.getOrders();
+		boolean hasOrder = false;
+		boolean handledLimitAndOffset = true;
+
+		if ((orderBys != null) && (orderBys.size() > 0)) {
+			hasOrder = true;
+			handledLimitAndOffset = false;
+		}
 
 		/* Searching by index */
 
@@ -161,22 +181,34 @@ public class MapDBPersistenceManager
 		/* Searching by tablescan */
 
 		int count = 0;
+		int skip = 0;
 		for (Entry<Object, Object> pair : pCLInfo.mPrimaryMap.entrySet()) {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> o = (Map<String, Object>) pair.getValue();
 			if (checkAgainstQuery(o, pCLInfo, pQueryInfo) == true) {
+				if ((hasOrder == false) && (opts.offset > skip)) {
+					skip++;
+					continue;
+				}
 				source.add(o);
-				if (pLimit != -1) {
+				if ((hasOrder == false) && (opts.limit != -1)) {
 					count++;
-					if (count >= pLimit)
+					if (count >= opts.limit)
 						break;
 				}
 			}
 		}
 
-		return buildSortedIterator(source, pQuery, pCLInfo, pQueryInfo,
-				pTransformer);
+		Iterator<O> i = buildSortedIterator(source, pQuery, pCLInfo,
+				pQueryInfo, pTransformer, (handledLimitAndOffset == true ? -1
+						: opts.limit), (handledLimitAndOffset == true ? 0
+						: opts.offset), opts.pageOpt);
+
+		resetOpts(pQuery);
+
+		return i;
 	}
+
 
 	@SuppressWarnings("unchecked")
 	@Override
