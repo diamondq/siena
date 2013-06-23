@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import siena.AbstractPersistenceManager;
 import siena.ClassInfo;
@@ -18,6 +19,13 @@ import siena.QueryFilter;
 import siena.QueryFilterSimple;
 import siena.QueryOrder;
 import siena.core.async.PersistenceManagerAsync;
+import siena.core.options.QueryOption;
+import siena.core.options.QueryOption.State;
+import siena.core.options.QueryOptionOffset;
+import siena.core.options.QueryOptionOffset.OffsetType;
+import siena.core.options.QueryOptionPage;
+import siena.core.options.QueryOptionPage.PageType;
+import siena.core.options.QueryOptionState;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -93,6 +101,11 @@ public abstract class BasePersistenceManager<EXTCLASSINFO extends ExtClassInfo, 
 				fields = clInfo.mSienaInfo.allFields;
 			for (Field f : fields) {
 				Object value = mapData.get(clInfo.mFieldToColumnNameMap.get(f));
+				if ((value != null) && (value instanceof Map)) {
+					EXTCLASSINFO newCLInfo = getClassInfo(f.getType(), true);
+					value = convertFromMap(newCLInfo,
+							(Map<String, Object>) value, false);
+				}
 				f.set(newObj, value);
 			}
 
@@ -171,6 +184,28 @@ public abstract class BasePersistenceManager<EXTCLASSINFO extends ExtClassInfo, 
 								primary.key);
 						m.put(clInfo.mFieldToColumnNameMap.get(f), value);
 						primary.key = m;
+					}
+				} else if (value != null) {
+
+					/* Determine if this is a primitive or another object */
+
+					Class<?> cl = value.getClass();
+					if ((cl.isPrimitive() == false) && (cl != String.class)
+							&& (cl != Integer.class) && (cl != Byte.class)
+							&& (cl != Short.class) && (cl != Long.class)
+							&& (cl != Double.class) && (cl != Float.class)
+							&& (cl != UUID.class)) {
+
+						/* We need to convert this into another Map */
+
+						EXTCLASSINFO newCLInfo = getClassInfo(cl, true);
+						List<MapData> newMapData = convertToMap(newCLInfo,
+								value);
+						if (newMapData.size() == 1)
+							value = newMapData.get(0).data;
+						else {
+							throw new IllegalArgumentException();
+						}
 					}
 				}
 				primary.data.put(clInfo.mFieldToColumnNameMap.get(f), value);
@@ -257,7 +292,8 @@ public abstract class BasePersistenceManager<EXTCLASSINFO extends ExtClassInfo, 
 		EXTQUERYINFO queryInfo = expandQuery(clInfo, pQuery, true);
 		Iterator<Object> iterator = retrieveData(clInfo, pQuery, queryInfo, -1,
 				null, getTransformerToKeys(clInfo));
-		return deleteByKeys(pQuery.getQueriedClass(), iterator);
+		ArrayList<Object> list = Lists.newArrayList(iterator);
+		return deleteByKeys(pQuery.getQueriedClass(), list);
 	}
 
 	/**
@@ -303,9 +339,7 @@ public abstract class BasePersistenceManager<EXTCLASSINFO extends ExtClassInfo, 
 		Function<EXTOBJECT, T> transformerToObject = getTransformerToObject(clInfo);
 		Iterator<T> iterator = retrieveData(clInfo, pQuery, queryInfo, pLimit,
 				pOffset, transformerToObject);
-		@SuppressWarnings("unchecked")
-		Iterable<T> r = (Iterable<T>) iterator;
-		return r;
+		return Lists.newArrayList(iterator);
 	}
 
 	/**
@@ -469,7 +503,14 @@ public abstract class BasePersistenceManager<EXTCLASSINFO extends ExtClassInfo, 
 
 	@Override
 	public <T> T getByKey(Class<T> clazz, Object key) {
-		throw new IllegalArgumentException("Not yet implemented"); //$NON-NLS-1$
+		EXTCLASSINFO classInfo = getClassInfo(clazz, true);
+		List<Field> keys = classInfo.mSienaInfo.keys;
+		Query<T> q = createQuery(clazz);
+		for (Field f : keys) {
+			String keyName = classInfo.mFieldToColumnNameMap.get(f);
+			q = q.filter(keyName, key);
+		}
+		return q.get();
 	}
 
 	@Override
@@ -534,17 +575,33 @@ public abstract class BasePersistenceManager<EXTCLASSINFO extends ExtClassInfo, 
 
 	@Override
 	public <T> void paginate(Query<T> query) {
-		throw new IllegalArgumentException("Not yet implemented"); //$NON-NLS-1$
+		Map<Integer, QueryOption> map = query.options();
+		QueryOptionPaginateValue opt = new QueryOptionPaginateValue(
+				QueryOptionPaginateValue.ID, State.ACTIVE, 0);
+		map.put(QueryOptionPaginateValue.ID, opt);
 	}
 
 	@Override
 	public <T> void nextPage(Query<T> query) {
-		throw new IllegalArgumentException("Not yet implemented"); //$NON-NLS-1$
+		QueryOptionPaginateValue opt = (QueryOptionPaginateValue) query
+				.option(QueryOptionPaginateValue.ID);
+		if (opt == null)
+			throw new IllegalArgumentException();
+		if (opt.isAtEnd == false)
+			opt.value = opt.value + 1;
 	}
 
 	@Override
 	public <T> void previousPage(Query<T> query) {
-		throw new IllegalArgumentException("Not yet implemented"); //$NON-NLS-1$
+		QueryOptionPaginateValue opt = (QueryOptionPaginateValue) query
+				.option(QueryOptionPaginateValue.ID);
+		if (opt == null)
+			throw new IllegalArgumentException();
+		if (opt.isAtEnd == true)
+			opt.isAtEnd = false;
+		opt.value = opt.value - 1;
+		if (opt.value < 0)
+			opt.value = 0;
 	}
 
 	@Override
@@ -564,17 +621,31 @@ public abstract class BasePersistenceManager<EXTCLASSINFO extends ExtClassInfo, 
 	 *            the query info
 	 * @param pTransformer
 	 *            the transformer
+	 * @param pLimit
+	 *            the maximum number of entries
+	 * @param pOffset
+	 *            the starting offset
 	 * @return the iterator of sorted, transformed data
 	 */
 	@SuppressWarnings("unchecked")
 	protected <O, T> Iterator<O> buildSortedIterator(
 			Iterable<EXTOBJECT> pSource, Query<T> pQuery,
 			final EXTCLASSINFO pCLInfo, EXTQUERYINFO pQueryInfo,
-			Function<EXTOBJECT, O> pTransformer) {
+			Function<EXTOBJECT, O> pTransformer, int pLimit, int pOffset,
+			QueryOptionPaginateValue pPageOpt) {
 		final List<QueryOrder> orderBys = pQuery.getOrders();
-		if ((orderBys == null) || (orderBys.size() == 0))
-			return Iterators.transform(pSource.iterator(), pTransformer);
-		else {
+		if ((orderBys == null) || (orderBys.size() == 0)) {
+			Iterable<EXTOBJECT> inputList;
+			if (pOffset == 0)
+				inputList = pSource;
+			else
+				inputList = Iterables.skip(pSource, pOffset);
+			if (pLimit > -1)
+				inputList = Iterables.limit(inputList, pLimit);
+			if ((pPageOpt != null) && (inputList.iterator().hasNext() == false))
+				pPageOpt.isAtEnd = true;
+			return Iterators.transform(inputList.iterator(), pTransformer);
+		} else {
 			Ordering<EXTOBJECT> o = new Ordering<EXTOBJECT>() {
 
 				@Override
@@ -603,9 +674,16 @@ public abstract class BasePersistenceManager<EXTCLASSINFO extends ExtClassInfo, 
 
 			};
 			List<EXTOBJECT> sortedCopy = o.sortedCopy(pSource);
-			Iterable<O> transform = Iterables.transform(sortedCopy,
-					pTransformer);
-			return transform.iterator();
+			Iterable<EXTOBJECT> inputList;
+			if (pOffset == 0)
+				inputList = sortedCopy;
+			else
+				inputList = Iterables.skip(sortedCopy, pOffset);
+			if (pLimit > -1)
+				inputList = Iterables.limit(inputList, pLimit);
+			if ((pPageOpt != null) && (inputList.iterator().hasNext() == false))
+				pPageOpt.isAtEnd = true;
+			return Iterators.transform(inputList.iterator(), pTransformer);
 		}
 	}
 
@@ -779,4 +857,60 @@ public abstract class BasePersistenceManager<EXTCLASSINFO extends ExtClassInfo, 
 
 	protected abstract Object getFromRaw(EXTOBJECT pObj, EXTCLASSINFO pCLInfo,
 			Field pField);
+
+	protected <T> void resetOpts(Query<T> pQuery) {
+		QueryOptionState stateOpt = (QueryOptionState) pQuery
+				.option(QueryOptionState.ID);
+		QueryOptionOffset offsetOpt = (QueryOptionOffset) pQuery
+				.option(QueryOptionOffset.ID);
+		QueryOptionPage pageOpt = (QueryOptionPage) pQuery
+				.option(QueryOptionPage.ID);
+		if (stateOpt.isStateful()) {
+
+		} else {
+			if (pageOpt.isPaginating()) {
+
+			} else {
+				pageOpt.pageSize = 0;
+				pageOpt.pageType = PageType.TEMPORARY;
+				offsetOpt.offset = 0;
+				offsetOpt.offsetType = OffsetType.MANUAL;
+			}
+		}
+	}
+
+	protected <T> BaseOptions getStandardOptions(Query<T> pQuery, int pLimit,
+			Object pOffset) {
+		QueryOptionOffset offsetOpt = (QueryOptionOffset) pQuery
+				.option(QueryOptionOffset.ID);
+		QueryOptionPage pageOpt = (QueryOptionPage) pQuery
+				.option(QueryOptionPage.ID);
+		QueryOptionPaginateValue pageValueOpt = (QueryOptionPaginateValue) pQuery
+				.option(QueryOptionPaginateValue.ID);
+
+		int offset = 0;
+		int limit = -1;
+		if (pageOpt.isPaginating()) {
+			if (pageValueOpt == null)
+				offset = 0;
+			else
+				offset = pageValueOpt.value * pageOpt.pageSize;
+			limit = pageOpt.pageSize;
+		} else if (pageOpt.isManual()) {
+			if (offsetOpt.isManual())
+				offset = offsetOpt.offset;
+			else
+				offset = 0;
+			limit = (pageOpt.pageSize == 0 ? -1 : pageOpt.pageSize);
+		} else if (offsetOpt.isManual()) {
+			offset = offsetOpt.offset;
+			limit = -1;
+		}
+		if (pLimit != -1)
+			limit = pLimit;
+		if ((pOffset != null) && (pOffset instanceof Number))
+			offset = ((Number) pOffset).intValue();
+
+		return new BaseOptions(limit, offset, pageValueOpt);
+	}
 }
