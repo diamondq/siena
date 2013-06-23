@@ -535,6 +535,7 @@ public abstract class BaseTest extends TestCase {
 					add(LongManualID_TESLA.id);
 					add(LongManualID_CURIE.id);
 				}})
+				.order("id")
 				.fetch();
 
 		assertNotNull(people);
