@@ -16,7 +16,7 @@ import siena.base.test.model.MassEntity;
 
 public abstract class BaseMassTest extends TestCase {
 	
-	private PersistenceManager pm;
+	protected PersistenceManager pm;
 
 	protected static final int NB_ENTITIES = 10000;
 	
