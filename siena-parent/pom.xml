@@ -117,6 +117,7 @@
    <modules>
       <module>../source</module>
       <module>../siena-mapdb</module>
+      <module>../siena-redis</module>
    </modules>
 
 
