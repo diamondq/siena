@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
+import siena.core.async.PersistenceManagerAsync;
 import siena.logging.SienaLogger;
 import siena.logging.SienaLoggerFactory;
 
@@ -46,26 +47,28 @@ public class PersistenceManagerFactory {
 	protected static SienaLogger logger = SienaLoggerFactory.getLogger(PersistenceManagerFactory.class);
 
 	private Map<String, PersistenceManager> configuration;
+	private Map<String, PersistenceManagerAsync> asyncConfiguration;
 
 	public PersistenceManagerFactory() {
 		configuration = new ConcurrentHashMap<String, PersistenceManager>();
+		asyncConfiguration = new ConcurrentHashMap<String, PersistenceManagerAsync>();
 	}
 
 	public static PersistenceManager getPersistenceManager(Class<?> clazz) {
 		return getInstance().get(clazz);
 	}
 
+	public static PersistenceManagerAsync getPersistenceManagerAsync(Class<?> clazz) {
+		return getInstance().getAsync(clazz);
+	}
+	
 	private static PersistenceManagerFactory getInstance() {
 		if(singleton == null)
 			singleton = new PersistenceManagerFactory();
 		return singleton;
 	}
 
-	private PersistenceManager get(Class<?> clazz) {
-		String pack = getPackage(clazz);
-		PersistenceManager pm = configuration.get(pack);
-		if(pm != null) return pm;
-		
+	private Properties buildProperties(String pack, Class<?> clazz) {
 		URL url = clazz.getResource("siena.properties");
 		if(url == null)
 			throw new SienaException("Cannot load siena.properties file for package: "+pack);
@@ -86,10 +89,18 @@ public class PersistenceManagerFactory {
 				p.setProperty(key.substring(prefix.length()), value);
 			}
 		}
-		// --
+		return p;
+	}
+	
+	private PersistenceManager get(Class<?> clazz) {
+		String pack = getPackage(clazz);
+		PersistenceManager pm = configuration.get(pack);
+		if(pm != null) return pm;
+		
+		Properties p = buildProperties(pack, clazz);
 		String impl = p.getProperty("implementation");
 		if(impl == null)
-			throw new SienaException("key 'implementation' not found at "+url);
+			throw new SienaException("key 'implementation' not found for "+pack);
 
 		try {
 			pm = (PersistenceManager) Class.forName(impl).newInstance();
@@ -98,6 +109,27 @@ public class PersistenceManagerFactory {
 			throw new SienaException("Error while creating instance of: "+impl, e);
 		}
 		configuration.put(pack, pm);
+		return pm;
+	}
+
+
+	private PersistenceManagerAsync getAsync(Class<?> clazz) {
+		String pack = getPackage(clazz);
+		PersistenceManagerAsync pm = asyncConfiguration.get(pack);
+		if(pm != null) return pm;
+		
+		Properties p = buildProperties(pack, clazz);
+		String impl = p.getProperty("asyncimplementation");
+		if(impl == null)
+			throw new SienaException("key 'asyncimplementation' not found for "+pack);
+
+		try {
+			pm = (PersistenceManagerAsync) Class.forName(impl).newInstance();
+			pm.init(p);
+		} catch (Exception e) {
+			throw new SienaException("Error while creating instance of: "+impl, e);
+		}
+		asyncConfiguration.put(pack, pm);
 		return pm;
 	}
 
@@ -116,10 +148,29 @@ public class PersistenceManagerFactory {
 		}
 	}
 	
+	public static void install(PersistenceManagerAsync pm, Class<?> clazz) {
+		// if class is abstract, it is not installed
+		if(!Modifier.isAbstract(clazz.getModifiers())){
+			getInstance().put(pm, getPackage(clazz));
+		}
+	}
+
+	public static void install(PersistenceManagerAsync pm, Iterable<Class<?>> clazzes) {
+		for(Class<?> clazz: clazzes){
+			if(!Modifier.isAbstract(clazz.getModifiers())){
+				getInstance().put(pm, getPackage(clazz));
+			}
+		}
+	}
+	
 	private void put(PersistenceManager pm, String pack) {
 		configuration.put(pack, pm);
 	}
-	
+
+	private void put(PersistenceManagerAsync pm, String pack) {
+		asyncConfiguration.put(pack, pm);
+	}
+
 	private static String getPackage(Class<?> clazz) {
 		String clazzName = clazz.getName();
 		return clazzName.substring(0, clazzName.lastIndexOf('.'));
