@@ -1,17 +1,21 @@
 package siena.mapdb.test;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 
-import org.mapdb.DB;
 import org.mapdb.DBMaker;
 
 import siena.PersistenceManager;
 import siena.base.test.BaseTest;
 import siena.mapdb.MapDBPersistenceManager;
+import siena.mapdb.MapDBPersistenceManager.TransactionType;
 
 public class MapDBTest extends BaseTest {
+
+	protected File mTempFile;
 
 	@SuppressWarnings("unused")
 	@Override
@@ -20,9 +24,11 @@ public class MapDBTest extends BaseTest {
 
 		/* Define the basic environment */
 
-		DB db = DBMaker.newDirectMemoryDB().make();
+		mTempFile = File.createTempFile("Siena", ".db");
+		DBMaker dbMaker = DBMaker.newFileDB(mTempFile);
 
-		MapDBPersistenceManager newPM = new MapDBPersistenceManager(db);
+		MapDBPersistenceManager newPM = new MapDBPersistenceManager(dbMaker,
+				TransactionType.AUTO);
 		Properties properties = new Properties();
 		newPM.init(properties);
 
@@ -37,6 +43,18 @@ public class MapDBTest extends BaseTest {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		((MapDBPersistenceManager) pm).exit();
+		File[] delFiles = mTempFile.getParentFile().listFiles(new FileFilter() {
+
+			@Override
+			public boolean accept(File pArg) {
+				if (pArg.getName().startsWith(mTempFile.getName()))
+					return true;
+				return false;
+			}
+		});
+		for (File f : delFiles)
+			if (f.delete() == false)
+				f.deleteOnExit();
 	}
 
 	@Override
