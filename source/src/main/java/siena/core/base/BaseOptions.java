@@ -1,16 +1,19 @@
 package siena.core.base;
 
-public class BaseOptions {
+import siena.core.options.QueryOptionPage;
+import siena.core.options.QueryOptionState;
 
-	public int limit;
-	public int offset;
-	public QueryOptionPaginateValue pageOpt;
+public class BaseOptions
+{
+	public final QueryOptionPage			pageOpt;
+	public final QueryOptionState			stateOpt;
+	public final QueryOptionCursorDetails	cursorOpt;
 
-	public BaseOptions(int pLimit, int pOffset,
-			QueryOptionPaginateValue pPageOpt) {
-		limit = pLimit;
-		offset = pOffset;
+	public BaseOptions(QueryOptionPage pPageOpt, QueryOptionState pStateOpt, QueryOptionCursorDetails pCursorOpt)
+	{
 		pageOpt = pPageOpt;
+		stateOpt = pStateOpt;
+		cursorOpt = pCursorOpt;
 	}
 
 }

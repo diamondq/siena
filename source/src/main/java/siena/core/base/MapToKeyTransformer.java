@@ -1,36 +1,35 @@
 package siena.core.base;
 
 import java.lang.reflect.Field;
-import java.util.Map;
 
 import com.google.common.base.Function;
 
-public class MapToKeyTransformer<EXTCLASSINFO extends ExtClassInfo, EXTQUERYINFO extends BaseQueryInfo<EXTCLASSINFO>>
-		implements Function<Map<String, Object>, Object> {
+public class MapToKeyTransformer<EXTCLASSINFO extends ExtClassInfo, EXTQUERYINFO extends BaseQueryInfo<?, EXTCLASSINFO>, EXTTRANSSCOPE extends ExtTransScope, EXTOBJECT>
+	implements Function<EXTOBJECT, EXTOBJECT>
+{
 
-	private EXTCLASSINFO mCLInfo;
+	private EXTCLASSINFO																	mCLInfo;
+	private BasePersistenceManager<EXTCLASSINFO, EXTQUERYINFO, EXTTRANSSCOPE, EXTOBJECT>	mPM;
 
-	public MapToKeyTransformer(
-			BasePersistenceManager<EXTCLASSINFO, EXTQUERYINFO, Map<String, Object>> pPM,
-			EXTCLASSINFO pCLInfo) {
+	public MapToKeyTransformer(BasePersistenceManager<EXTCLASSINFO, EXTQUERYINFO, EXTTRANSSCOPE, EXTOBJECT> pPM,
+		EXTCLASSINFO pCLInfo)
+	{
+		mPM = pPM;
 		mCLInfo = pCLInfo;
 	}
 
 	@Override
-	public Object apply(Map<String, Object> pInput) {
+	public EXTOBJECT apply(EXTOBJECT pInput)
+	{
 		int keyCount = mCLInfo.mSienaInfo.keys.size();
-		if (keyCount > 1) {
-			Object[] keys = new Object[keyCount];
-			for (int i = 0; i < keyCount; i++) {
-				Field keyField = mCLInfo.mSienaInfo.keys.get(i);
-				keys[i] = pInput.get(mCLInfo.mFieldToColumnNameMap
-						.get(keyField));
-			}
-			return keys;
-		} else {
-			Field keyField = mCLInfo.mSienaInfo.keys.get(0);
-			return pInput.get(mCLInfo.mFieldToColumnNameMap.get(keyField));
+		EXTOBJECT result = mPM.createLow(mCLInfo);
+		for (int i = 0; i < keyCount; i++)
+		{
+			Field keyField = mCLInfo.mSienaInfo.keys.get(i);
+			mPM.setLowColumnValue(result, mCLInfo, keyField,
+				mPM.getLowColumnValue(pInput, mCLInfo, keyField.getType(), keyField));
 		}
+		return result;
 	}
 
 }
