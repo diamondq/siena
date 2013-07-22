@@ -38,7 +38,7 @@ public abstract class BaseTestNoAutoInc_BASE extends AbstractTest {
 	
 	public void createClasses(List<Class<?>> classes) {
 		//classes.add(PersonUUID.class);
-		//classes.add(PersonLongAutoID.class);
+		classes.add(PersonLongAutoID.class);
 		//classes.add(PersonLongManualID.class);
 		classes.add(PersonStringID.class);
 		//classes.add(PersonStringAutoIncID.class);
@@ -75,12 +75,14 @@ public abstract class BaseTestNoAutoInc_BASE extends AbstractTest {
 
 		pm.createQuery(PersonUUID.class).delete();
 		pm.createQuery(PersonLongManualID.class).delete();
+		pm.createQuery(PersonLongAutoID.class).delete();
 		pm.createQuery(PersonStringID.class).delete();
 		pm.createQuery(DataTypes.class).delete();
 		pm.createQuery(DiscoveryStringId.class).delete();
 		pm.createQuery(Discovery4Search2StringId.class).delete();
 
 		pm.insert(UUID_TESLA, UUID_CURIE, UUID_EINSTEIN);
+		pm.insert(LongAutoID_TESLA, LongAutoID_CURIE, LongAutoID_EINSTEIN);
 		pm.insert(LongManualID_TESLA, LongManualID_CURIE, LongManualID_EINSTEIN);
 		pm.insert(StringID_TESLA, StringID_CURIE, StringID_EINSTEIN);
 		

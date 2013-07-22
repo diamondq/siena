@@ -22,7 +22,7 @@ public abstract class BaseTestNoAutoInc_7_BATCH extends BaseTestNoAutoInc_BASE {
 		assertEquals(discs.length, nb);
 		
 		List<DiscoveryStringId> res = 
-			pm.createQuery(DiscoveryStringId.class).fetch();
+			pm.createQuery(DiscoveryStringId.class).order("name").fetch();
 		
 		assertEquals(discs.length, res.size());
 		int i=0;
@@ -39,7 +39,7 @@ public abstract class BaseTestNoAutoInc_7_BATCH extends BaseTestNoAutoInc_BASE {
 		assertEquals(discs.size(), nb);
 		
 		List<DiscoveryStringId> res = 
-			pm.createQuery(DiscoveryStringId.class).fetch();
+			pm.createQuery(DiscoveryStringId.class).order("name").fetch();
 		
 		assertEquals(discs.size(), res.size());
 		int i=0;
@@ -242,7 +242,7 @@ public abstract class BaseTestNoAutoInc_7_BATCH extends BaseTestNoAutoInc_BASE {
 		int nb = pm.update(discs);
 		assertEquals(discs.length, nb);
 		res = 
-			pm.createQuery(DiscoveryStringId.class).fetch();
+			pm.createQuery(DiscoveryStringId.class).order("name").fetch();
 		int i=0;
 		for(DiscoveryStringId disc:res){
 			assertEquals(discs[i++], disc);
@@ -270,7 +270,7 @@ public abstract class BaseTestNoAutoInc_7_BATCH extends BaseTestNoAutoInc_BASE {
 		nb = pm.update(discs);
 		assertEquals(discs.size(), nb);
 		res = 
-			pm.createQuery(DiscoveryStringId.class).fetch();
+			pm.createQuery(DiscoveryStringId.class).order("name").fetch();
 		int i=0;
 		for(DiscoveryStringId disc:res){
 			assertEquals(discs.get(i++), disc);
@@ -333,7 +333,7 @@ public abstract class BaseTestNoAutoInc_7_BATCH extends BaseTestNoAutoInc_BASE {
 		pm.save(discs);
 
 		List<Discovery4Search2StringId> res = 
-			pm.createQuery(Discovery4Search2StringId.class).fetch();
+			pm.createQuery(Discovery4Search2StringId.class).order("name").fetch();
 		
 		assertEquals(discs.length, res.size());
 		int i=0;
@@ -349,7 +349,7 @@ public abstract class BaseTestNoAutoInc_7_BATCH extends BaseTestNoAutoInc_BASE {
 		int nb = pm.save(discs);
 		assertEquals(discs.length, nb);
 		res = 
-			pm.createQuery(Discovery4Search2StringId.class).fetch();
+			pm.createQuery(Discovery4Search2StringId.class).order("name").fetch();
 		i=0;
 		for(Discovery4Search2StringId disc:res){
 			assertEquals(discs[i++], disc);
@@ -368,7 +368,7 @@ public abstract class BaseTestNoAutoInc_7_BATCH extends BaseTestNoAutoInc_BASE {
 		assertEquals(discs.size(), nb);
 		
 		List<Discovery4Search2StringId> res = 
-			pm.createQuery(Discovery4Search2StringId.class).fetch();
+			pm.createQuery(Discovery4Search2StringId.class).order("name").fetch();
 		
 		assertEquals(discs.size(), res.size());
 		int i=0;
@@ -384,7 +384,7 @@ public abstract class BaseTestNoAutoInc_7_BATCH extends BaseTestNoAutoInc_BASE {
 		nb = pm.save(discs);
 		assertEquals(discs.size(), nb);
 		res = 
-			pm.createQuery(Discovery4Search2StringId.class).fetch();
+			pm.createQuery(Discovery4Search2StringId.class).order("name").fetch();
 		i=0;
 		for(Discovery4Search2StringId disc:res){
 			assertEquals(discs.get(i++), disc);

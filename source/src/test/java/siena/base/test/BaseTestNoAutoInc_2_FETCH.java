@@ -108,7 +108,7 @@ public abstract class BaseTestNoAutoInc_2_FETCH extends BaseTestNoAutoInc_BASE {
 	public void testFetchOrderOnLongAutoId() {
 		if(supportsAutoincrement()){
 			List<PersonLongAutoID> people = queryPersonLongAutoIDOrderBy("id", "", false).fetchKeys();
-			assertEquals(0, people.size());
+			assertEquals(3, people.size());
 		}else {
 			try {
 				List<PersonLongAutoID> people = queryPersonLongAutoIDOrderBy("id", "", false).fetchKeys();				
@@ -158,7 +158,7 @@ public abstract class BaseTestNoAutoInc_2_FETCH extends BaseTestNoAutoInc_BASE {
 		if(supportsAutoincrement()){
 			List<PersonLongAutoID> people = queryPersonLongAutoIDOrderBy("id", "", true).fetchKeys();
 
-			assertEquals(0, people.size());
+			assertEquals(3, people.size());
 		}else {
 			try {
 				List<PersonLongAutoID> people = queryPersonLongAutoIDOrderBy("id", "", true).fetchKeys();
@@ -286,7 +286,7 @@ public abstract class BaseTestNoAutoInc_2_FETCH extends BaseTestNoAutoInc_BASE {
 	public void testFilterOperatorNotEqualLongAutoID() {
 		if(supportsAutoincrement()){
 			List<PersonLongAutoID> people = pm.createQuery(PersonLongAutoID.class).filter("id!=", LongAutoID_EINSTEIN.id).order("id").fetch();
-			assertEquals(0, people.size());
+			assertEquals(2, people.size());
 		}else {
 			try {
 				List<PersonLongAutoID> people = pm.createQuery(PersonLongAutoID.class).filter("id!=", LongAutoID_EINSTEIN.id).order("id").fetch();
@@ -379,6 +379,7 @@ public abstract class BaseTestNoAutoInc_2_FETCH extends BaseTestNoAutoInc_BASE {
 						add(LongAutoID_TESLA.id);
 						add(LongAutoID_CURIE.id);
 					}})
+					.order("id")
 					.fetch();
 
 			assertNotNull(people);
@@ -477,8 +478,8 @@ public abstract class BaseTestNoAutoInc_2_FETCH extends BaseTestNoAutoInc_BASE {
 			}catch(SienaRestrictedApiException ex){
 				return;
 			}
+			fail();
 		}
-		fail();
 	}
 	
 	public void testFilterOperatorLessThanForLongManualID() {
@@ -542,8 +543,8 @@ public abstract class BaseTestNoAutoInc_2_FETCH extends BaseTestNoAutoInc_BASE {
 			}catch(SienaRestrictedApiException ex){
 				return;
 			}
+			fail();
 		}
-		fail();
 	}
 	
 	public void testFilterOperatorLessThanOrEqualForLongManualID() {

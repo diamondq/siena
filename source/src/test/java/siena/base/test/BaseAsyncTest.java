@@ -83,6 +83,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		classes.add(Discovery4Join2.class);
 		classes.add(DiscoveryPrivate.class);
 		classes.add(Discovery4Search.class);
+		classes.add(DiscoveryNoColumn.class);
 		classes.add(DataTypes.class);
 		pm = createPersistenceManager(classes);
 		
@@ -509,6 +510,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		SienaFuture<List<PersonUUID>> future = 
 			pm.createQuery(PersonUUID.class)
 				.filter("id IN", Arrays.asList( l.get(0).id, l.get(1).id))
+				.order("id")
 				.fetch();
 
 		List<PersonUUID> people = future.get();
@@ -527,7 +529,7 @@ public abstract class BaseAsyncTest extends TestCase {
 					add(LongAutoID_TESLA.id);
 					add(LongAutoID_CURIE.id);
 				}})
-				.fetch();
+				.order("id").fetch();
 
 		List<PersonLongAutoID> people = future.get();
 		assertNotNull(people);
@@ -1613,7 +1615,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		
 		pm.insert(radioactivity, relativity, foo, teslaCoil).get();
 		
-		SienaFuture<List<Discovery4Join>> future = pm.createQuery(Discovery4Join.class).fetch();
+		SienaFuture<List<Discovery4Join>> future = pm.createQuery(Discovery4Join.class).order("id").fetch();
 		List<Discovery4Join> res = future.get(); 
 		assertEquals(4, res.size());
 		assertEquals(radioactivity, res.get(0));
@@ -3209,7 +3211,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		assertEquals(discs.length, (int)resf.get());
 		
 		SienaFuture<List<Discovery>> future = 
-			pm.createQuery(Discovery.class).fetch();
+			pm.createQuery(Discovery.class).order("id").fetch();
 		List<Discovery> res = future.get();
 		
 		assertEquals(discs.length, res.size());
@@ -3227,7 +3229,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		assertEquals(discs.size(), (int)resf.get());
 
 		SienaFuture<List<Discovery>> future = 
-			pm.createQuery(Discovery.class).fetch();
+			pm.createQuery(Discovery.class).order("id").fetch();
 		List<Discovery> res = future.get();
 		
 		assertEquals(discs.size(), res.size());
@@ -5177,7 +5179,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		pm.insert(radioactivity, relativity, foo, teslaCoil).get();
 
 		List<Discovery4Join2> res = pm.createQuery(Discovery4Join2.class)
-				.fetch().get();
+				.order("id").fetch().get();
 		assertEquals(4, res.size());
 		assertEquals(radioactivity, res.get(0));
 		assertEquals(relativity, res.get(1));
@@ -5215,7 +5217,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		int nb = pm.update(discs).get();
 		assertEquals(discs.length, nb);
 		res = 
-			pm.createQuery(Discovery.class).fetch().get();
+			pm.createQuery(Discovery.class).order("id").fetch().get();
 		int i=0;
 		for(Discovery disc:res){
 			assertEquals(discs[i++], disc);
@@ -5243,7 +5245,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		nb = pm.update(discs).get();
 		assertEquals(discs.size(), nb);
 		res = 
-			pm.createQuery(Discovery.class).fetch().get();
+			pm.createQuery(Discovery.class).order("id").fetch().get();
 		int i=0;
 		for(Discovery disc:res){
 			assertEquals(discs.get(i++), disc);
@@ -5531,7 +5533,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		pm.save(discs).get();
 
 		SienaFuture<List<Discovery>> future = 
-			pm.createQuery(Discovery.class).fetch();
+			pm.createQuery(Discovery.class).order("id").fetch();
 		List<Discovery> res = future.get();
 		assertEquals(discs.length, res.size());
 		int i=0;
@@ -5547,7 +5549,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		int nb = pm.save(discs).get();
 		assertEquals(discs.length, nb);
 		future = 
-			pm.createQuery(Discovery.class).fetch();
+			pm.createQuery(Discovery.class).order("id").fetch();
 		res = future.get();
 		i=0;
 		for(Discovery disc:res){
@@ -5566,7 +5568,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		assertEquals(discs.size(), nb);
 		
 		SienaFuture<List<Discovery>> future = 
-			pm.createQuery(Discovery.class).fetch();
+			pm.createQuery(Discovery.class).order("id").fetch();
 		List<Discovery> res = future.get();
 		
 		assertEquals(discs.size(), res.size());
@@ -5583,7 +5585,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		nb = pm.save(discs).get();
 		assertEquals(discs.size(), nb);
 		future = 
-			pm.createQuery(Discovery.class).fetch();
+			pm.createQuery(Discovery.class).order("id").fetch();
 		res = future.get();
 		i=0;
 		for(Discovery disc:res){
@@ -5639,7 +5641,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		
 		pm.insert(radioactivity, relativity, foo, teslaCoil).get();
 		
-		List<DiscoveryNoColumn> res = pm.createQuery(DiscoveryNoColumn.class).fetch().get();
+		List<DiscoveryNoColumn> res = pm.createQuery(DiscoveryNoColumn.class).order("id").fetch().get();
 		assertEquals(4, res.size());
 		assertEquals(radioactivity, res.get(0));
 		assertEquals(relativity, res.get(1));
