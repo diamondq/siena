@@ -5,7 +5,6 @@ import java.util.List;
 
 import siena.Query;
 import siena.base.test.model.DiscoveryStringId;
-import siena.sdb.SdbPersistenceManager;
 
 public abstract class BaseTestNoAutoInc_5_PAGINATE extends BaseTestNoAutoInc_BASE {
 	public void postInit() {
@@ -14,7 +13,6 @@ public abstract class BaseTestNoAutoInc_5_PAGINATE extends BaseTestNoAutoInc_BAS
 
 		//pm.insert(StringID_TESLA, StringID_CURIE, StringID_EINSTEIN);
 		
-		pm.option(SdbPersistenceManager.CONSISTENT_READ);
 
 	}		
 

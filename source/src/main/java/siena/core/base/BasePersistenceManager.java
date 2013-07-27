@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Queue;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,7 +65,6 @@ import siena.embed.EmbedIgnore;
 import siena.embed.Embedded;
 import siena.embed.JsonSerializer;
 
-import com.google.appengine.api.taskqueue.Queue;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.Iterables;

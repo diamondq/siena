@@ -33,7 +33,6 @@ import java.util.UUID;
 import siena.embed.Embedded;
 import siena.embed.JavaSerializer;
 import siena.embed.JsonSerializer;
-import siena.jdbc.JdbcPersistenceManager.JdbcClassInfo;
 
 /**
  * Util class for general proposals.
@@ -373,13 +372,6 @@ public class Util {
 		}catch(Exception e){
 			throw new SienaException(e);
 		}		
-	}
-	
-	public static void copyObject(Object objFrom, Object objTo) {
-		Class<?> clazz = objFrom.getClass();
-		for (Field field : JdbcClassInfo.getClassInfo(clazz).allFields) {
-			Util.setField(objTo, field, Util.readField(objFrom, field));
-		}
 	}
 	
 	public static Class<?> getGenericClass(Field f, int n) {

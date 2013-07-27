@@ -1271,7 +1271,7 @@ public class JdbcPersistenceManager extends AbstractPersistenceManager {
 				
 				for(Object res:results){
 					Object resKey = Util.readField(res, f);
-					Util.copyObject(res, keyObj.get(resKey));
+					JdbcDBUtils.copyObject(res, keyObj.get(resKey));
 				}
 				
 				total+=results.size();

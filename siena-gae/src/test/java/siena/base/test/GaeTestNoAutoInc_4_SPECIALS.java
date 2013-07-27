@@ -5,22 +5,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+
 import siena.PersistenceManager;
 import siena.Query;
 import siena.SienaException;
 import siena.SienaRestrictedApiException;
 import siena.base.test.model.PersonStringID;
-import siena.sdb.SdbPersistenceManager;
+import siena.gae.GaePersistenceManager;
 
-public class SDBTestNoAutoInc_3_ITER extends BaseTestNoAutoInc_3_ITER {
-
+public class GaeTestNoAutoInc_4_SPECIALS extends BaseTestNoAutoInc_4_SPECIALS {
+	private final LocalServiceTestHelper helper =
+        new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+	
+	private static GaePersistenceManager pm;
+	
 	@Override
 	public PersistenceManager createPersistenceManager(List<Class<?>> classes)
 			throws Exception {
-		
-		SdbPersistenceManager sdb = new SdbPersistenceManager();
-		sdb.init(SimpleDBConfig.getSienaAWSProperties());
-		return sdb;
+		if(pm==null){
+			pm = new GaePersistenceManager();
+			//PersistenceManagerFactory.install(pm, Discovery4GeneratorNone.class);
+			pm.init(null);
+		}
+		return pm;
 	}
 
 	@Override
@@ -40,6 +49,7 @@ public class SDBTestNoAutoInc_3_ITER extends BaseTestNoAutoInc_3_ITER {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 	@Override
 	public boolean supportsDeleteException() {
 		// TODO Auto-generated method stub
@@ -61,7 +71,7 @@ public class SDBTestNoAutoInc_3_ITER extends BaseTestNoAutoInc_3_ITER {
 	@Override
 	public boolean supportsTransaction() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -69,4 +79,24 @@ public class SDBTestNoAutoInc_3_ITER extends BaseTestNoAutoInc_3_ITER {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+    public void setUp() throws Exception {
+    	helper.setUp();
+        super.setUp();
+    }
+
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+        helper.tearDown();
+    }
+
+	@Override
+	public void testEnum() {
+		// TODO Auto-generated method stub
+		super.testEnum();
+	}
+   
+    
 }

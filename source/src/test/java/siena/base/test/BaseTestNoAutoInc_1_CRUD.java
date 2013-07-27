@@ -10,8 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.appengine.tools.info.SupportInfo;
-
 import siena.Query;
 import siena.SienaRestrictedApiException;
 import siena.base.test.model.Address;
@@ -28,7 +26,6 @@ import siena.base.test.model.PersonLongManualID;
 import siena.base.test.model.PersonStringAutoIncID;
 import siena.base.test.model.PersonStringID;
 import siena.base.test.model.PersonUUID;
-import siena.sdb.SdbPersistenceManager;
 
 public abstract class BaseTestNoAutoInc_1_CRUD extends BaseTestNoAutoInc_BASE {
 	

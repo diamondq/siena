@@ -14,7 +14,6 @@ import siena.base.test.model.PersonLongAutoID;
 import siena.base.test.model.PersonLongManualID;
 import siena.base.test.model.PersonStringID;
 import siena.base.test.model.PersonUUID;
-import siena.sdb.SdbPersistenceManager;
 
 public abstract class BaseTestNoAutoInc_BASE extends AbstractTest {
 	
@@ -89,8 +88,6 @@ public abstract class BaseTestNoAutoInc_BASE extends AbstractTest {
 		/*pm.insert(UUID_TESLA, UUID_CURIE, UUID_EINSTEIN,
 				LongManualID_TESLA, LongManualID_CURIE, LongManualID_EINSTEIN,
 				StringID_TESLA, StringID_CURIE, StringID_EINSTEIN);*/
-
-		pm.option(SdbPersistenceManager.CONSISTENT_READ);
 
 	}
 	

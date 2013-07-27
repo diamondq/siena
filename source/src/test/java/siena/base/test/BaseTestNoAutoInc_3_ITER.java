@@ -27,7 +27,6 @@ import siena.base.test.model.PersonLongManualID;
 import siena.base.test.model.PersonStringAutoIncID;
 import siena.base.test.model.PersonStringID;
 import siena.base.test.model.PersonUUID;
-import siena.sdb.SdbPersistenceManager;
 
 public abstract class BaseTestNoAutoInc_3_ITER extends BaseTestNoAutoInc_BASE {
 	

@@ -170,11 +170,6 @@
 	</reporting>
 
 	<properties>
-		<mysql.version>5.1.6</mysql.version>
-		<gae.version>1.7.1</gae.version>
-		<hbase.version>0.21.0-SNAPSHOT</hbase.version>
-		<postgres.version>8.4-702.jdbc4</postgres.version>
-		<drizzle.version>1.0</drizzle.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -282,12 +277,17 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>dom4j</groupId>
-			<artifactId>dom4j</artifactId>
-			<version>1.6.1</version>
-			<scope>compile</scope>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>14.0.1</version>
 		</dependency>
-
+	
+			<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>[1.3,)</version>
+		</dependency>
+	
 
 		<!-- Test -->
 		<dependency>
@@ -297,124 +297,16 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.2.2</version>
-			<scope>test</scope>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.apache.ddlutils</groupId>
-			<artifactId>ddlutils</artifactId>
-			<version>1.0</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<version>2.2</version>
-			<scope>test</scope>
-		</dependency>
-
-
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>postgresql</groupId>
-		    <artifactId>postgresql</artifactId>
-		    <version>${postgres.version}</version>
-		    <scope>test</scope>
-		</dependency>
-		
-		<dependency>                                                                        
-			<groupId>org.drizzle.jdbc</groupId>                                          
-			<artifactId>drizzle-jdbc</artifactId>                                        
-			<version>${drizzle.version}</version>                                                       
-		    <scope>test</scope>
-		</dependency>
-		
-        <!-- Google App Engine Dependencies -->
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-tools-sdk</artifactId>
-			<version>${gae.version}</version>
-			<scope>provided</scope>
-		</dependency>		
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-api-1.0-sdk</artifactId>
-			<version>${gae.version}</version>
-			<scope>compile</scope>
-		</dependency>		
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-testing</artifactId>
-			<version>${gae.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-api-labs</artifactId>
-			<version>${gae.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-api-stubs</artifactId>
-			<version>${gae.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<!-- Hbase dependencies -->
-		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase</artifactId>
-			<version>${hbase.version}</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<!-- H2 dependencies -->
-		<dependency>
-		    <groupId>com.h2database</groupId>
-		    <artifactId>h2</artifactId>
-		    <version>1.3.154</version>
-			<scope>compile</scope>
-		</dependency>
-
-
 		<!-- Fusion dependencies -->
+		<!-- 
 		<dependency>
 		    <groupId>com.google.api.client</groupId>
 		    <artifactId>google-api-client</artifactId>
 		    <version>1.4.1-beta</version>
 		</dependency>
-
-		<!-- SDB dependencies -->
-		<dependency>
-    		<groupId>com.amazonaws</groupId>
-    		<artifactId>aws-java-sdk</artifactId>
-    		<version>1.2.4</version>
-		</dependency>		
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-			<version>4.2.1</version>
-		</dependency>
+ -->
 		
-		<!-- Objectify dependencies -->
-        <dependency>
-            <groupId>com.googlecode.objectify</groupId>
-            <artifactId>objectify</artifactId>
-            <version>3.1</version>
-        </dependency>
+	
 	</dependencies>
 
 	<profiles>

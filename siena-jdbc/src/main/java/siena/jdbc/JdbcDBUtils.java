@@ -55,6 +55,13 @@ public class JdbcDBUtils {
 		}
 	}
 
+	public static void copyObject(Object objFrom, Object objTo) {
+		Class<?> clazz = objFrom.getClass();
+		for (Field field : JdbcClassInfo.getClassInfo(clazz).allFields) {
+			Util.setField(objTo, field, Util.readField(objFrom, field));
+		}
+	}
+	
 	public static void closeStatementAndConnection(JdbcPersistenceManager pm, Statement st) {
 		try {
 			if(st != null){
