@@ -487,8 +487,6 @@ public abstract class Model {
 	}
 
 	class ProxyMany<T> implements Many4PM<T> {
-		private static final long serialVersionUID = -4540064249546783019L;
-		
 		private Class<T> 		clazz;
 		private Model 			obj;
 		private Many4PM<T> 		many;

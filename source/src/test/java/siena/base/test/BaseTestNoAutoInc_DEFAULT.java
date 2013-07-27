@@ -4,8 +4,6 @@ import static siena.Json.map;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +21,6 @@ import siena.base.test.model.DiscoveryStringId;
 import siena.base.test.model.MultipleKeys;
 import siena.base.test.model.PersonLongAutoID;
 import siena.base.test.model.PersonLongManualID;
-import siena.base.test.model.PersonStringAutoIncID;
 import siena.base.test.model.PersonStringID;
 import siena.base.test.model.PersonUUID;
 
@@ -208,6 +205,7 @@ public abstract class BaseTestNoAutoInc_DEFAULT extends BaseTestNoAutoInc_BASE {
 	
 	public void testFilterOperatorEqualLongAutoID() {
 		try {
+			@SuppressWarnings("unused")
 			PersonLongAutoID person = pm.createQuery(PersonLongAutoID.class).filter("id", LongAutoID_EINSTEIN.id).get();
 		}catch(SienaRestrictedApiException ex){
 			return;
@@ -337,7 +335,7 @@ public abstract class BaseTestNoAutoInc_DEFAULT extends BaseTestNoAutoInc_BASE {
 	
 	public void testFilterOperatorInForLongAutoID() {
 		try {
-			@SuppressWarnings("serial")
+			@SuppressWarnings({ "serial", "unused" })
 			List<PersonLongAutoID> people = 
 				pm.createQuery(PersonLongAutoID.class)
 					.filter("id IN", new ArrayList<Long>(){{ 
@@ -412,6 +410,7 @@ public abstract class BaseTestNoAutoInc_DEFAULT extends BaseTestNoAutoInc_BASE {
 	
 	public void testFilterOperatorLessThanForLongAutoID() {
 		try {
+			@SuppressWarnings("unused")
 			List<PersonLongAutoID> people = pm.createQuery(PersonLongAutoID.class).filter("id<", LongAutoID_EINSTEIN.id).order("id").fetch();
 		}catch(SienaRestrictedApiException ex){
 			return;
@@ -467,6 +466,7 @@ public abstract class BaseTestNoAutoInc_DEFAULT extends BaseTestNoAutoInc_BASE {
 	
 	public void testFilterOperatorLessThanOrEqualForLongAutoID() {
 		try {
+			@SuppressWarnings("unused")
 			List<PersonLongAutoID> people = pm.createQuery(PersonLongAutoID.class).filter("id<=", LongAutoID_EINSTEIN.id).order("id").fetch();
 		}catch(SienaRestrictedApiException ex){
 			return;
@@ -523,6 +523,7 @@ public abstract class BaseTestNoAutoInc_DEFAULT extends BaseTestNoAutoInc_BASE {
 	
 	public void testFilterOperatorMoreThanForLongAutoID() {
 		try {
+			@SuppressWarnings("unused")
 			List<PersonLongAutoID> people = pm.createQuery(PersonLongAutoID.class).filter("id>", LongAutoID_TESLA.id).order("id").fetch();
 		}catch(SienaRestrictedApiException ex){
 			return;
@@ -579,6 +580,7 @@ public abstract class BaseTestNoAutoInc_DEFAULT extends BaseTestNoAutoInc_BASE {
 	
 	public void testFilterOperatorMoreThanOrEqualForLongAutoID() {
 		try {
+			@SuppressWarnings("unused")
 			List<PersonLongAutoID> people = pm.createQuery(PersonLongAutoID.class).filter("id>=", LongAutoID_CURIE.id).order("id").fetch();
 		}catch(SienaRestrictedApiException ex){
 			return;

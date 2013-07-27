@@ -14,17 +14,16 @@ import siena.Model;
 import siena.base.test.model.Address;
 import siena.base.test.model.AutoInc;
 import siena.base.test.model.BigDecimalDoubleModelStringId;
-import siena.base.test.model.BigDecimalModel;
 import siena.base.test.model.BigDecimalModelNoPrecisionStringId;
 import siena.base.test.model.BigDecimalModelStringId;
 import siena.base.test.model.BigDecimalStringModelStringId;
 import siena.base.test.model.Contact;
 import siena.base.test.model.DataTypes;
-import siena.base.test.model.PersonStringID;
 import siena.base.test.model.DataTypes.EnumLong;
 import siena.base.test.model.DiscoveryStringId;
 import siena.base.test.model.EnumTest;
 import siena.base.test.model.MultipleKeys;
+import siena.base.test.model.PersonStringID;
 import siena.base.test.model.PersonUUID;
 import siena.base.test.model.PolymorphicModel;
 import siena.base.test.model.PolymorphicModelStringId;
@@ -283,7 +282,7 @@ public abstract class BaseTestNoAutoInc_4_SPECIALS extends BaseTestNoAutoInc_BAS
 		PolymorphicModelStringId<String> poly = new PolymorphicModelStringId<String>("test", "test2");
 		pm.insert(poly);
 		
-		PolymorphicModelStringId poly2 = pm.getByKey(PolymorphicModelStringId.class, poly.id);
+		PolymorphicModelStringId<?> poly2 = pm.getByKey(PolymorphicModelStringId.class, poly.id);
 		assertEquals(poly, poly2);
 	}
 	
@@ -294,6 +293,7 @@ public abstract class BaseTestNoAutoInc_4_SPECIALS extends BaseTestNoAutoInc_BAS
 		PolymorphicModelStringId<List<String>> poly = new PolymorphicModelStringId<List<String>>("test", arr);
 		pm.insert(poly);
 		
+		@SuppressWarnings("unchecked")
 		PolymorphicModelStringId<List<String>> poly2 = pm.getByKey(PolymorphicModelStringId.class, poly.id);
 		assertEquals(poly, poly2);
 	}

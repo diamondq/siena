@@ -56,7 +56,7 @@ public class PolymorphicModel<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PolymorphicModel other = (PolymorphicModel) obj;
+		PolymorphicModel<?> other = (PolymorphicModel<?>) obj;
 		if (payload == null) {
 			if (other.payload != null)
 				return false;

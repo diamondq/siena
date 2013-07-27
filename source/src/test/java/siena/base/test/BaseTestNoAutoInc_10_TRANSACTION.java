@@ -3,7 +3,6 @@ package siena.base.test;
 import java.sql.Connection;
 
 import siena.SienaException;
-import siena.SienaRestrictedApiException;
 import siena.base.test.model.TransactionAccountFrom;
 import siena.base.test.model.TransactionAccountTo;
 

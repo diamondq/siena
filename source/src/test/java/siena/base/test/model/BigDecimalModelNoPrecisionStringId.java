@@ -20,8 +20,6 @@ import java.math.BigDecimal;
 import siena.Generator;
 import siena.Id;
 import siena.Table;
-import siena.core.DecimalPrecision;
-import siena.core.DecimalPrecision.StorageType;
 
 @Table("big_decimal_no_prec_stringid")
 public class BigDecimalModelNoPrecisionStringId {

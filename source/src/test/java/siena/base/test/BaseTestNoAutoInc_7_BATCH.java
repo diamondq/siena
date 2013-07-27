@@ -284,6 +284,7 @@ public abstract class BaseTestNoAutoInc_7_BATCH extends BaseTestNoAutoInc_BASE {
 			assertNull(pers);
 		}else {
 			try {
+				@SuppressWarnings("unused")
 				PersonLongAutoID pers = getByKeyPersonLongAutoID(12345678L);
 			}catch(SienaRestrictedApiException ex){
 				return;				
@@ -303,6 +304,7 @@ public abstract class BaseTestNoAutoInc_7_BATCH extends BaseTestNoAutoInc_BASE {
 			assertEquals(LongAutoID_CURIE, curie);
 		}else {
 			try {
+				@SuppressWarnings("unused")
 				PersonLongAutoID curie = getByKeyPersonLongAutoID(LongAutoID_CURIE.id);
 			}catch(SienaRestrictedApiException ex){
 				return;

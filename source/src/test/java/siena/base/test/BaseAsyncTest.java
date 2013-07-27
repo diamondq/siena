@@ -12,14 +12,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.TestCase;
-import siena.Query;
 import siena.SienaException;
 import siena.base.test.model.Address;
 import siena.base.test.model.AutoInc;
 import siena.base.test.model.Contact;
 import siena.base.test.model.DataTypes;
 import siena.base.test.model.DataTypes.EnumLong;
-import siena.base.test.model.EmbeddedContainerModel;
 import siena.base.test.model.Discovery;
 import siena.base.test.model.Discovery4Join;
 import siena.base.test.model.Discovery4Join2;
@@ -27,6 +25,7 @@ import siena.base.test.model.Discovery4Search;
 import siena.base.test.model.DiscoveryNoColumn;
 import siena.base.test.model.DiscoveryNoColumnMultipleKeys;
 import siena.base.test.model.DiscoveryPrivate;
+import siena.base.test.model.EmbeddedContainerModel;
 import siena.base.test.model.EmbeddedModel;
 import siena.base.test.model.MultipleKeys;
 import siena.base.test.model.PersonLongAutoID;
@@ -5597,6 +5596,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		PolymorphicModel<String> poly = new PolymorphicModel<String>("test");
 		pm.insert(poly).get();
 		
+		@SuppressWarnings("unchecked")
 		PolymorphicModel<String> poly2 = pm.getByKey(PolymorphicModel.class, poly.id).get();
 		assertEquals(poly, poly2);
 	}
@@ -5608,6 +5608,7 @@ public abstract class BaseAsyncTest extends TestCase {
 		PolymorphicModel<List<String>> poly = new PolymorphicModel<List<String>>(arr);
 		pm.insert(poly).get();
 		
+		@SuppressWarnings("unchecked")
 		PolymorphicModel<List<String>> poly2 = pm.getByKey(PolymorphicModel.class, poly.id).get();
 		assertEquals(poly, poly2);
 	}

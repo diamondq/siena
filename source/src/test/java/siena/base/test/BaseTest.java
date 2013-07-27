@@ -1106,6 +1106,7 @@ public abstract class BaseTest extends TestCase
 	{
 		try
 		{
+			@SuppressWarnings("unused")
 			PersonLongAutoID pers = getPersonLongAutoID(1234567L);
 		}
 		catch (SienaException e)
@@ -5390,6 +5391,7 @@ public abstract class BaseTest extends TestCase
 		String str = JsonSerializer.serialize(query).toString();
 		assertNotNull(str);
 
+		@SuppressWarnings("unchecked")
 		Query<Discovery> qjRes = (Query<Discovery>) JsonSerializer.deserialize(BaseQuery.class, Json.loads(str));
 		assertNotNull(qjRes);
 		for (int i = 0; i < qjRes.getFilters().size(); i++)
@@ -5895,7 +5897,7 @@ public abstract class BaseTest extends TestCase
 		PolymorphicModel<String> poly = new PolymorphicModel<String>("test");
 		pm.insert(poly);
 
-		PolymorphicModel poly2 = pm.getByKey(PolymorphicModel.class, poly.id);
+		PolymorphicModel<?> poly2 = pm.getByKey(PolymorphicModel.class, poly.id);
 		assertEquals(poly, poly2);
 	}
 
@@ -5907,6 +5909,7 @@ public abstract class BaseTest extends TestCase
 		PolymorphicModel<List<String>> poly = new PolymorphicModel<List<String>>(arr);
 		pm.insert(poly);
 
+		@SuppressWarnings("unchecked")
 		PolymorphicModel<List<String>> poly2 = pm.getByKey(PolymorphicModel.class, poly.id);
 		assertEquals(poly, poly2);
 	}

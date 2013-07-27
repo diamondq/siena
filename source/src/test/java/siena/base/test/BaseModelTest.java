@@ -2,20 +2,15 @@ package siena.base.test;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import junit.framework.TestCase;
-import siena.Model;
 import siena.PersistenceManager;
 import siena.PersistenceManagerFactory;
 import siena.Query;
 import siena.SienaException;
-import siena.base.test.model.AggregateChildModel;
-import siena.base.test.model.AggregateParentModel;
 import siena.base.test.model.DiscoveryModel;
 import siena.base.test.model.PersonLongAutoIDAbstract;
 import siena.base.test.model.PersonLongAutoIDExtended;
@@ -777,7 +772,10 @@ public abstract class BaseModelTest extends TestCase {
 		img3.title = "title";
 		
 		List<PersonLongAutoIDExtended.Image> imgList = new ArrayList<PersonLongAutoIDExtended.Image>() 
-		{{
+		{
+			private static final long serialVersionUID = 1L;
+
+		{
 			add(img1);
 			add(img2);
 			add(img3);			
@@ -785,7 +783,10 @@ public abstract class BaseModelTest extends TestCase {
 		
 		Map<String, PersonLongAutoIDExtended.Image> imgMap = 
 			new HashMap<String, PersonLongAutoIDExtended.Image>() 
-		{{
+		{
+			private static final long serialVersionUID = 1L;
+
+		{
 			put("img1", img1);
 			put("img2", img2);
 			put("img3", img3);			

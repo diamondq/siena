@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import siena.Column;
 import siena.Generator;
 import siena.Id;
 import siena.Json;

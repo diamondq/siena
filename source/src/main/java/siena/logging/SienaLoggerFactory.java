@@ -33,8 +33,7 @@ public class SienaLoggerFactory {
 	 * @param clazz Class
 	 * @return SienaLogger.
 	 */
-	@SuppressWarnings("unchecked")
-	public static SienaLogger getLogger(Class clazz) {
+	public static SienaLogger getLogger(@SuppressWarnings("rawtypes") Class clazz) {
 
 		return getLogger(clazz.getName());
 	} // getLogger.

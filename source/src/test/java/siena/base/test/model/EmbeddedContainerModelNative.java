@@ -1,7 +1,5 @@
 package siena.base.test.model;
 
-import java.util.List;
-
 import siena.Column;
 import siena.Generator;
 import siena.Id;

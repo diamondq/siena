@@ -57,7 +57,7 @@ public class PolymorphicModelStringId<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PolymorphicModelStringId other = (PolymorphicModelStringId) obj;
+		PolymorphicModelStringId<?> other = (PolymorphicModelStringId<?>) obj;
 		if (payload == null) {
 			if (other.payload != null)
 				return false;

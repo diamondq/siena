@@ -402,6 +402,7 @@ public class JsonSerializer {
 		return deserialize(clazz, data);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Object deserializePlain(Class<?> type, Json data) {
 		if(Boolean.class == type || boolean.class == type) {
 			return data!=null ? data.asBoolean() : 0;

@@ -21,8 +21,6 @@ import siena.Util;
  *
  */
 public class BaseMany<T> implements Many4PM<T>{
-	transient private static final long serialVersionUID = -1417704952199421178L;
-
 	transient protected PersistenceManager pm;
 	transient protected Class<T> clazz;
 	

@@ -77,6 +77,7 @@ public class Util {
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Object fromString(Class<?> type, String value) {
 		if(value == null) return null;
 		if(type.isPrimitive()) {
@@ -103,6 +104,7 @@ public class Util {
 		throw new IllegalArgumentException("Unsupported type: "+type.getName());
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Object fromString(Class<?> type, String value, boolean retValueIfNotSupported) {
 		if(value == null) return null;
 		if(type.isPrimitive()) {
@@ -203,6 +205,7 @@ public class Util {
 		return value.toString();
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Object fromObject(Field field, Object value) {
 		Class<?> type = field.getType();
 		if(value == null) {

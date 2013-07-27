@@ -1,10 +1,8 @@
 package siena.base.test.model;
 
-import siena.Column;
 import siena.Filter;
 import siena.Generator;
 import siena.Id;
-import siena.Max;
 import siena.Model;
 import siena.Query;
 

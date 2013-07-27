@@ -1,29 +1,10 @@
 package siena.base.test;
 
-import static siena.Json.map;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
-import siena.Query;
 import siena.SienaRestrictedApiException;
-import siena.base.test.model.Address;
-import siena.base.test.model.AutoInc;
-import siena.base.test.model.Contact;
-import siena.base.test.model.DataTypes;
-import siena.base.test.model.DataTypes.EnumLong;
-import siena.base.test.model.Discovery4JoinStringId;
-import siena.base.test.model.DiscoveryPrivate;
-import siena.base.test.model.DiscoveryStringId;
-import siena.base.test.model.MultipleKeys;
 import siena.base.test.model.PersonLongAutoID;
 import siena.base.test.model.PersonLongManualID;
-import siena.base.test.model.PersonStringAutoIncID;
 import siena.base.test.model.PersonStringID;
 import siena.base.test.model.PersonUUID;
 
@@ -134,6 +115,7 @@ public abstract class BaseTestNoAutoInc_1_CRUD extends BaseTestNoAutoInc_BASE {
 			assertEquals(LongAutoID_CURIE, curie);
 		}else {
 			try {
+				@SuppressWarnings("unused")
 				PersonLongAutoID curie = getPersonLongAutoID(LongAutoID_CURIE.id);
 			}catch(SienaRestrictedApiException ex){
 				return;
@@ -169,6 +151,7 @@ public abstract class BaseTestNoAutoInc_1_CRUD extends BaseTestNoAutoInc_BASE {
 			assertEquals(curie2, curie);
 		}else {
 			try {
+				@SuppressWarnings("unused")
 				PersonLongAutoID curie = getPersonLongAutoID(LongAutoID_CURIE.id);
 			}catch(SienaRestrictedApiException ex){
 				return;

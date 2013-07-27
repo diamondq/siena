@@ -29,7 +29,8 @@ public class EmbeddedNative{
     
     @EmbeddedMap
     public static class SubEmbed implements Serializable {
-    	public String str;
+		private static final long serialVersionUID = 1L;
+		public String str;
     	public Long   l;
     	
     	public String toString() {

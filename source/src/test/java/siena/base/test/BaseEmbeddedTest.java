@@ -130,7 +130,9 @@ public abstract class BaseEmbeddedTest extends TestCase {
 		embed.beta = 123;
 		embed.setGamma(true);
 		embed.delta = 456L;
-		embed.eta = new ArrayList<String>() {{ add("one"); add("two"); }};
+		embed.eta = new ArrayList<String>() {
+			private static final long serialVersionUID = 1L;
+		{ add("one"); add("two"); }};
 		embed.myEnum = MyEnum.ONE;
 		embed.big = new BigDecimal("12345678.12345678");
 		embed.jsonEmbed = new EmbeddedNative.SubEmbed();
@@ -175,7 +177,9 @@ public abstract class BaseEmbeddedTest extends TestCase {
 			embed.beta = 123;
 			embed.setGamma(true);
 			embed.delta = 456L;
-			embed.eta = new ArrayList<String>() {{ add("one"); add("two"); }};
+			embed.eta = new ArrayList<String>() {
+				private static final long serialVersionUID = 1L;
+				{ add("one"); add("two"); }};
 			embed.myEnum = MyEnum.ONE;
 			embed.big = new BigDecimal("12345678.12345678");
 			embed.jsonEmbed = new EmbeddedNative.SubEmbed();

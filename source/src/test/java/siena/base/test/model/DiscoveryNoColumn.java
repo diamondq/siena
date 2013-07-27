@@ -1,6 +1,5 @@
 package siena.base.test.model;
 
-import siena.Column;
 import siena.Generator;
 import siena.Id;
 import siena.Join;
