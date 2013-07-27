@@ -118,6 +118,11 @@
       <module>../source</module>
       <module>../siena-mapdb</module>
       <module>../siena-redis</module>
+      <module>../siena-gae</module>
+      <module>../siena-hbase</module>
+      <module>../siena-jdbc</module>
+      <module>../siena-remote</module>
+      <module>../siena-sdb</module>
    </modules>
 
 
