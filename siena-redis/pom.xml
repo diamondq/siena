@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>siena</groupId>
 			<artifactId>siena</artifactId>
-			<version>1.0.0-b6</version>
+			<version>1.0.0-b7</version>
 			<scope>test</scope>
 			<classifier>tests</classifier>
 		</dependency>
@@ -77,6 +77,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
