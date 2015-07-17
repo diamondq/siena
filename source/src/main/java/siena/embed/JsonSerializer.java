@@ -290,6 +290,29 @@ public class JsonSerializer {
 					return ret;
 				}
 			}
+	    else if(Collection.class.isAssignableFrom(clazz)) {
+	      if(!data.isList()) {
+//          throw new SienaException("Error while deserializating class "+clazz
+//              +". A Json list is needed but found: "+data);
+	        return null;
+	      }
+	      Collection<Object> collection = null;
+	      if(clazz == List.class) {
+	        collection = new ArrayList<Object>(data.size());
+	      } else {
+	        collection = new HashSet<Object>();
+	      }
+	      for (Json value : data) {
+	        if( value.isString()){
+	          collection.add(deserializePlain(String.class, value));
+	        }
+	        else
+	          // TODO other types
+	         continue;
+	      }
+	      return collection;
+	    }
+			
 			return deserializePlain(clazz, data);
 		} catch(Exception e) {
 			throw new SienaException(e);
@@ -363,7 +386,8 @@ public class JsonSerializer {
 			Object arr = Array.newInstance(arrClazz, data.size());
 			int i=0;
 			for (Json value : data) {
-				Array.set(arr, i++, deserialize(arrClazz, value));
+			  Object deserialized = deserialize(arrClazz, value);
+				Array.set(arr, i++, deserialized );
 			}
 			
 			return arr;
@@ -402,7 +426,6 @@ public class JsonSerializer {
 		return deserialize(clazz, data);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Object deserializePlain(Class<?> type, Json data) {
 		if(Boolean.class == type || boolean.class == type) {
 			return data!=null ? data.asBoolean() : 0;
@@ -414,7 +437,8 @@ public class JsonSerializer {
 			return data!=null ? data.asShort() : 0;
 		}
 		else if(type == Integer.class || type == Integer.TYPE) {
-			return data!=null ? data.asInt() : 0;
+		  Object val = data!=null ? data.asInt() : null;
+			return val;
 		}
 		else if(type == Long.class || type == Long.TYPE)    {
 			return data!=null ? data.asLong() : 0;
