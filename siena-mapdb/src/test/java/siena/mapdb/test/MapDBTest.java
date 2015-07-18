@@ -17,7 +17,6 @@ public class MapDBTest extends BaseTest {
 
 	protected File mTempFile;
 
-	@SuppressWarnings("unused")
 	@Override
 	public PersistenceManager createPersistenceManager(List<Class<?>> classes)
 			throws Exception {

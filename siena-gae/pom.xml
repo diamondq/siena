@@ -17,7 +17,7 @@
 	</repositories>
 
 	<properties>
-		<gae.version>1.7.1</gae.version>
+		<gae.version>1.8.6</gae.version>
 	</properties>
 
 	<dependencies>
@@ -76,19 +76,19 @@
 			<scope>test</scope>
 		</dependency>
 
-	<!-- Objectify dependencies -->
- 
-        <dependency>
-            <groupId>com.googlecode.objectify</groupId>
-            <artifactId>objectify</artifactId>
-            <version>3.1</version>
-        </dependency>
+		<!-- Objectify dependencies -->
 
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.5</version>
-        </dependency>
+		<dependency>
+			<groupId>com.googlecode.objectify</groupId>
+			<artifactId>objectify</artifactId>
+			<version>4.0rc2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.5</version>
+		</dependency>
 
 	</dependencies>
 
