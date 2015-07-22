@@ -1,8 +1,16 @@
 h1. Welcome to Siena project! 
 
-**Latest tagged version is Siena v1.0.0-b5**
+**Latest tagged version is Siena v1.0.0-b7**
 
-bq. You can now find some "manuals":https://github.com/mandubian/siena/wiki/Manuals
+h2. The diamondq fork
+
+This fork provides a couple of additional features beyond the master:
+* Broken up all the different data store implementations into separate projects to reduce dependency clutter
+* Simplified the implementation of a new data store implementation by creating a strong abstract base class.
+* Simplified the testing of a new implementation by enabling a common set of test cases
+* Added the MapDB data store implementation
+
+bq. You can now find some "manuals":https://github.com/diamondq/siena/wiki/Manuals
 
 Siena is a persistence API for Java inspired by the Google App Engine Python Datastore trying to draw a bridge between SQL and NoSQL worlds. 
 It provides a __Java Object-DB mapping__ designed following the "ActiveRecord pattern":http://en.wikipedia.org/wiki/Active_record_pattern#Java which brings a simple and intuitive approach to manage your Java objects with respect to the database entities.
@@ -11,7 +19,6 @@ It provides a __Java Object-DB mapping__ designed following the "ActiveRecord pa
 
 h2. Where can you find us also?
 
-* The main website is http://www.sienaproject.com but the doc is not up-to-date there as it refers to the old version 0.x of Siena.
 
 * We have a IRC channel on freenode:
 ** irc server: @irc.freenode.net:6667@
@@ -61,16 +68,6 @@ Siena is meant to keep the layer between your code and the low-level database AP
 The biggest part of Siena DB implementations is :
 * Mapping from Java types to low level DB types
 * Business code to manage high level mechanism such as pagination or stateless/stateful modes
-
-==<br/>==
-
-h3. Siena core is ONE jar and some tools/modules around this core library
-
-Siena tries to be as simple as possible in its dependencies. For the time being, in order to use Siena with all DB implementations, *you just need the siena.jar and the DB Jar(s)* (JDBC or GAE) but nothing else. There is no hidden or transitive dependencies on other frameworks or Jars. So you can use Siena in a simple Java application or in a simple web app or in a JEE app.
-
-Our purpose is also to provide tools or integrated modules based on this core library to use Siena in given environments.
-
-**The first module developed for Siena is "play-siena":http://www.playframework.org/modules/siena-2.0.0/home**: the web framework "Play!":http://www.playframework.org is really great, really fits Siena design and provides a very good test platform.
 
 ==<br/>==
 
